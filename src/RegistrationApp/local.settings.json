@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "ENTER_STORAGE_CONNECTION_STRING",
+    "AzureWebJobsDashboard": "ENTER_STORAGE_CONNECTION_STRING",
+    "registrationstorage_STORAGE": "ENTER_STORAGE_CONNECTION_STRING",
+    "RequestStatusCheckUrl": "http://localhost:7071/api/RequestStatusCheck?guid=",
+    "AzureWebJobsSendGridApiKey": "ENTER_SENDGRID_APIKEY",
+    "AzureWebJobsTwilioAccountSid": "ENTER_TWILIO_ACCOUNTSID",
+    "AzureWebJobsTwilioAuthToken": "ENTER_TWILIO_AUTHTOKEN"
+  }
+}

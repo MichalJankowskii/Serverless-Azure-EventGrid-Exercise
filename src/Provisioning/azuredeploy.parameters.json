@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "value": "ENTER_UNIQUE_NAME"
+    },
+    "sendGridApiKey": {
+      "value": "ENTER_SENDGRID_APIKEY"
+    },
+    "twilioAccountSid": {
+      "value": "ENTER_TWILIO_ACCOUNTSID"
+    },
+    "twilioAuthToken": {
+      "value": "ENTER_TWILIO_AUTHTOKEN"
+    }
+  }
+}

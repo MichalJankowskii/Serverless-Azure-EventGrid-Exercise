@@ -1,0 +1,115 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "type": "string"
+    },
+    "sendGridApiKey": {
+      "type": "string"
+    },
+    "twilioAccountSid": {
+      "type": "string"
+    },
+    "twilioAuthToken": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "regionId": "West Europe",
+    "Storage_FullName": "[concat('Storage', parameters('appName'))]",
+    "Storage_Name": "[toLower(substring(variables('Storage_FullName'),0, min(24 ,length(variables('Storage_FullName')))))]",
+
+    "Function_FullName": "[concat('Function', parameters('appName'))]",
+    "Function_Name": "[toLower(substring(variables('Function_FullName'),0, min(24 ,length(variables('Function_FullName')))))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "Storage",
+      "name": "[variables('Storage_Name')]",
+      "apiVersion": "2017-10-01",
+      "location": "[variables('regionId')]",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            },
+            "file": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp",
+      "name": "[variables('Function_Name')]",
+      "apiVersion": "2016-03-01",
+      "location": "[variables('regionId')]",
+      "properties": {
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "AzureWebJobsDashboard",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('Storage_Name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('Storage_Name')), '2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('Storage_Name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('Storage_Name')), '2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~1"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('Storage_Name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('Storage_Name')), '2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[concat(variables('Function_Name'), '8426')]"
+            },
+            {
+              "name": "WEBSITE_NODE_DEFAULT_VERSION",
+              "value": "6.5.0"
+            },
+            {
+              "name": "registrationstorage_STORAGE",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('Storage_Name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('Storage_Name')), '2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "RequestStatusCheckUrl",
+              "value": "[concat('https://', variables('Function_Name'),'.azurewebsites.net/api/RequestStatusCheck?code=ENTER_CODE_HERE&guid=')]"
+            },
+            {
+              "name": "AzureWebJobsSendGridApiKey",
+              "value": "[parameters('sendGridApiKey')]"
+            },
+            {
+              "name": "AzureWebJobsTwilioAccountSid",
+              "value": "[parameters('twilioAccountSid')]"
+            },
+            {
+              "name": "AzureWebJobsTwilioAuthToken",
+              "value": "[parameters('twilioAuthToken')]"
+            }
+          ]
+        },
+        "name": "[variables('Function_Name')]",
+        "clientAffinityEnabled": false
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('Storage_Name'))]"
+      ]
+    }
+  ],
+  "outputs": {}
+}
