@@ -17,7 +17,7 @@ Refactor existing solution to use only [Event Grid](https://azure.microsoft.com/
 
 ## Deployment
 1. Open solution and update the following files:
-- `local.settings.json`
+- `local.settings.json` (only for local debugging)
 - `SendNotificationSMS.cs`
 - `SendThankYouEmailMessage.cs`
 2. Build solution
