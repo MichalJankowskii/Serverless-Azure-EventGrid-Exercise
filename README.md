@@ -17,9 +17,9 @@ Refactor existing solution to use only [Event Grid](https://azure.microsoft.com/
 
 ## Deployment
 1. Open solution and update the following files:
--- `local.settings.json`
--- `SendNotificationSMS.cs`
--- `SendThankYouEmailMessage.cs`
+- `local.settings.json`
+- `SendNotificationSMS.cs`
+- `SendThankYouEmailMessage.cs`
 2. Build solution
 3. Publish it to already created *Function App*. Please note that tables and queues will be automatically created before the first usage.
 4. Open *RequestStatusCheck* function and copy *function key*.
